@@ -16,7 +16,7 @@ export default function Layout({ children }: ChildrenProps) {
       <SidebarInset>
         <SiteHeader />
         <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2">
+          <div className="@container/main flex flex-1 flex-col gap-2 min-h-screen p-4 sm:p-6 md:p-8 ">
             {children}
           </div>
         </div>

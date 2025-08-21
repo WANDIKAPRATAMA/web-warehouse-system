@@ -87,7 +87,7 @@ const authOptions: NextAuthOptions = {
               role: data.user.status,
               accessToken: data.access_token,
               refreshToken: data.refresh_token,
-              accessTokenExpires: Date.now() + 3600000,
+              // accessTokenExpires: Date.now() + 3600000,
               user: data.user,
             };
           } else {
@@ -134,13 +134,14 @@ const authOptions: NextAuthOptions = {
         token.refreshToken = user.refreshToken;
         token.user = user.user;
       }
-      // Return previous token if the access token has not expired yet
-      if (Date.now() < token.accessTokenExpires) {
-        return token;
-      }
+      // // Return previous token if the access token has not expired yet
+      // if (Date.now() < token.accessTokenExpires) {
+      //   return token;
+      // }
 
-      // Access token has expired, try to update it
-      return refreshAccessToken(token);
+      // // Access token has expired, try to update it
+      // return refreshAccessToken(token);
+      return token;
     },
 
     async session({ session, token }) {

@@ -1,14 +1,12 @@
 import PaginationControl from "@/components/common/paginations/pagination-control";
 import ErrorComponent from "@/components/common/place-holder/error-component";
 import TableSkeleton from "@/components/common/skeletons/table-skeleton";
-import ProductCategoryPage from "@/components/views/dashboard/categories/categories-page";
-import { getProductCategoriesListAction } from "@/lib/actions/product-categories-action";
+import ProductStockPage from "@/components/views/dashboard/stocks/stocks-page";
+import { getProductStocksListAction } from "@/lib/actions/product-stock-action";
 import { authOptions } from "@/lib/services/next-auth-service";
-import { ProductCategoryListItemResponse } from "@/lib/validations/product-categories-validation";
 import { getServerSession } from "next-auth";
 import { Fragment, Suspense } from "react";
 
-// app/dashboard/categories.tsx
 export default function Page({
   searchParams,
 }: {
@@ -41,36 +39,38 @@ async function Suspended({
       ? Number(resolvedParams?.limit)
       : 10;
   if (!resolvedSession || resolvedSession.error) {
-    <ErrorComponent
-      title="You are not authorized to view this page"
-      error={
-        resolvedSession?.error ??
-        new Error("You are not authorized to view this page")
-      }
-    />;
+    return (
+      <ErrorComponent
+        title="You are not authorized to view this page"
+        error={
+          resolvedSession?.error ??
+          new Error("You are not authorized to view this page")
+        }
+      />
+    );
   }
 
-  const response = await getProductCategoriesListAction(
+  const response = await getProductStocksListAction(
     resolvedSession?.user?.accessToken as string,
     { page, limit }
   );
-  console.log("🚀 ~ response:", response);
 
   if (response.status !== "success") {
-    <ErrorComponent
-      title="Something went wrong"
-      error={
-        response?.message ?? new Error("An error occurred while fetching data")
-      }
-    />;
+    return (
+      <ErrorComponent
+        title="Something went wrong"
+        error={
+          response?.message ??
+          new Error("An error occurred while fetching data")
+        }
+      />
+    );
   }
-  const paginations = response?.payload?.pagination as IPagination | null;
+  const paginations = response.payload.pagination as IPagination;
   return (
     <Fragment>
-      <ProductCategoryPage
-        init={
-          (response?.payload?.data as ProductCategoryListItemResponse[]) ?? []
-        }
+      <ProductStockPage
+        init={response.payload.data ?? []}
         token={resolvedSession?.user?.accessToken as string}
       />
       {paginations && (

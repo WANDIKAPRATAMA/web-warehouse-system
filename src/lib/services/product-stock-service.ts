@@ -181,6 +181,7 @@ export async function getProductStocksListRest(
         },
       };
     }
+
     return apiFetch<ProductStockListItemResponse[]>(
       "/product-stocks",
       "GET",
@@ -188,7 +189,13 @@ export async function getProductStocksListRest(
       undefined,
       {
         page: validatedQuery.data.page.toString(),
-        pageSize: validatedQuery.data.limit.toString(),
+        limit: validatedQuery.data.limit.toString(),
+        sort_by: "created_at",
+        order: "asc",
+        status: "available",
+        // sort_by: validatedQuery.data.sortBy ?? "created_at",
+        // order: validatedQuery.data.order ?? "asc",
+        // status: validatedQuery.data.status ?? "available",
       }
     );
   } catch (error) {

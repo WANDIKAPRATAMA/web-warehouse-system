@@ -172,7 +172,10 @@ export async function getWarehouseLocationsListRest(
       undefined,
       {
         page: validatedQuery.data.page.toString(),
-        pageSize: validatedQuery.data.limit.toString(),
+        limit: validatedQuery.data.limit.toString(),
+        sort_by: "created_at",
+        order: "asc",
+        status: "available",
       }
     );
   } catch (error) {

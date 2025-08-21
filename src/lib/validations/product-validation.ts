@@ -20,11 +20,15 @@ export type UpdateProductRequest = z.infer<typeof UpdateProductRequestSchema>;
 
 export const PaginationRequestSchema = z.object({
   page: z.number().int().positive().default(1),
-  limit: z.number().int().positive().default(10),
+  limit: z.number().int().positive().max(100).default(10),
+  search: z.string().optional(),
+  sortBy: z.enum(["name", "sku", "created_at"]).optional(),
+  order: z.enum(["asc", "desc"]).optional(),
+  category_id: z.string().uuid().optional(),
+  status: z.enum(["available", "low-stock", "out-of-stock"]).optional(),
 });
 
 export type PaginationRequest = z.infer<typeof PaginationRequestSchema>;
-
 export type ProductResponse = {
   id: string;
   name: string;

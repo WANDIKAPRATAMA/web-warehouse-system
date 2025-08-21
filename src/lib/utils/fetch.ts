@@ -27,8 +27,12 @@ async function apiFetch<T>(
       ...headers,
     },
     body: body ? JSON.stringify(body) : undefined,
-    ...(tags ? { next: { tags }, cache: "force-cache" } : { cache }),
+    cache: "no-cache",
+    // ...(tags ? { next: { tags }, cache: "force-cache" } : { cache }),
   };
+  console.log("🚀 ~ apiFetch ~ url:", url);
+
+  console.log("🚀 ~ apiFetch ~ fetchOptions:", fetchOptions);
 
   try {
     const response = await fetch(url.toString(), fetchOptions);

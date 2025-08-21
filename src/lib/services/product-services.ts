@@ -187,6 +187,7 @@ export async function getProductsListRest(
         },
       };
     }
+
     return apiFetch<ProductListItemResponse[]>(
       "/products",
       "GET",
@@ -194,7 +195,14 @@ export async function getProductsListRest(
       undefined,
       {
         page: validatedQuery.data.page.toString(),
-        pageSize: validatedQuery.data.limit.toString(),
+        limit: validatedQuery.data.limit.toString(),
+        search: validatedQuery.data.search ?? "",
+        sort_by: validatedQuery.data.sortBy ?? "created_at",
+        order: validatedQuery.data.order ?? "asc",
+        status: validatedQuery.data.status ?? "available",
+        ...(validatedQuery.data.category_id && {
+          category_id: validatedQuery.data.category_id,
+        }),
       }
     );
   } catch (error) {

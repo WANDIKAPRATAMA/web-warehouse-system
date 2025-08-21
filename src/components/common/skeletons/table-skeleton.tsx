@@ -1,6 +1,6 @@
 import ButtonSkeleton from "./button-skeleton";
 
-const ListSkeleton = () => (
+const TableSkeleton = () => (
   <div
     role="status"
     className="flex-1 max-w-full p-4 space-y-4 border border-gray-200 divide-y divide-gray-200 rounded-sm shadow-sm animate-pulse dark:divide-gray-700 md:p-6 dark:border-gray-700"
@@ -55,4 +55,4 @@ const ListSkeleton = () => (
   </div>
 );
 
-export default ListSkeleton;
+export default TableSkeleton;

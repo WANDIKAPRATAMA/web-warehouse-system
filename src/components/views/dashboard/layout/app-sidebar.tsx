@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 
 import {
@@ -18,39 +16,43 @@ import { NavSecondary } from "./nav-secondary";
 import { NavUser } from "./nav-user";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-  FolderIcon,
+  ChartBarStacked,
+  ChartColumnStacked,
   GalleryHorizontal,
+  LayoutDashboard,
   LayoutDashboardIcon,
-  UserStarIcon,
-  WarehouseIcon,
+  LocationEdit,
+  PackageSearch,
 } from "lucide-react";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/services/next-auth-service";
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
-      icon: LayoutDashboardIcon,
+      url: "/dashboard/",
+      icon: <LayoutDashboard className="w-4 h-4" />,
     },
     {
-      title: "Companys",
-      url: "/internal/company",
-      icon: WarehouseIcon,
+      title: "Products",
+      url: "/dashboard/products",
+      icon: <PackageSearch className="w-4 h-4" />,
     },
     {
-      title: "Testimonials",
-      url: "/internal/testimonials",
-      icon: UserStarIcon,
+      title: "Categories",
+      url: "/dashboard/categories",
+      icon: <ChartColumnStacked className="w-4 h-4" />,
     },
     {
-      title: "Content",
-      url: "/internal/content/",
-      icon: FolderIcon,
+      title: "Locations",
+      url: "/dashboard/locations",
+      icon: <LocationEdit className="w-4 h-4" />,
+    },
+    {
+      title: "Stocks",
+      url: "/dashboard/stocks",
+      icon: <ChartBarStacked className="w-4 h-4" />,
     },
   ],
   navClouds: [
@@ -137,7 +139,23 @@ const data = {
   ],
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export async function AppSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
+  const session = await getServerSession(authOptions);
+
+  const avatar = session?.user
+    ? {
+        name: session.user.name ?? session.user.email.split("@")[0],
+        email: session.user.email,
+        avatar: "",
+      }
+    : {
+        name: "System",
+        email: "system@gmail.com",
+        avatar: "",
+      };
+  console.log("🚀 ~ AppSidebar ~ avatar:", avatar);
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -149,7 +167,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <Link href="#">
                 <GalleryHorizontal className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
+                <span className="text-base font-semibold">WMS.</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -163,7 +181,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </ScrollArea>
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={avatar} />
       </SidebarFooter>
     </Sidebar>
   );
